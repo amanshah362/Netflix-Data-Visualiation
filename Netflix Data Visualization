@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Load Data
-df = pd.read_csv("C:\\Users\\Aman Shah\\Desktop\\PYTHON FROM SCRATCH\\Matplotlib Library\\Project\\netflix_titles.csv")
+df = pd.read_csv("netflix_titles.csv")
 print(df.head())
 
 # Clean Data
@@ -86,5 +86,5 @@ fig.delaxes(ax[7])  # Remove the extra subplot if not used
 plt.tight_layout(pad=4.0)  # Increase padding between subplots
 fig.subplots_adjust(top=0.80, hspace=0.4, wspace=0.3)  # Add horizontal and vertical space
 fig.suptitle("Netflix Data Visualizations", fontsize=20, fontweight="bold" )
-plt.savefig("C:\\Users\\Aman Shah\\Desktop\\PYTHON FROM SCRATCH\\Matplotlib Library\\Project\\Netflix Data Visualizations.pdf" , dpi = 300 , bbox_inches = "tight")
+plt.savefig("Netflix Data Visualizations.pdf" , dpi = 300 , bbox_inches = "tight")
 plt.show()
