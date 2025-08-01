@@ -1,0 +1,90 @@
+# Step - 1 import the library
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Load Data
+df = pd.read_csv("C:\\Users\\Aman Shah\\Desktop\\PYTHON FROM SCRATCH\\Matplotlib Library\\Project\\netflix_titles.csv")
+print(df.head())
+
+# Clean Data
+df = df.dropna(subset= ['type','release_year' , 'rating' ,'country','duration'])
+
+# Create a Bar Chart
+type_count = df['type'].value_counts()
+
+# Creating Subplots or Canvas
+fig, ax = plt.subplots(2, 4, figsize=(26, 12))
+ax = ax.flatten()
+
+
+ax[0].bar(type_count.index, type_count.values , color = ['skyblue' , 'orange'] , label = ["Movie" , "TV Show"])
+ax[0].set_xlabel('Type')
+ax[0].set_ylabel('Count')
+ax[0].set_title('Number of Movies vs TV Shows')
+ax[0].legend()
+
+
+rating_count = df['rating'].value_counts()
+top_ratings = rating_count.nlargest(6)
+ax[1].pie(top_ratings, labels=top_ratings.index, autopct='%1.1f%%', startangle=90, shadow=True)
+ax[1].set_title('Top 6 Ratings Distribution')
+
+movie_df = df[df['type'] == "Movie"].copy()
+movie_df['duration_int'] = pd.to_numeric(movie_df['duration'].str.extract('(\d+)')[0], errors='coerce')
+movie_df = movie_df.dropna(subset=['duration_int'])
+
+ax[2].hist(movie_df['duration_int'], bins=10, color='purple', edgecolor='black' , label = "Movie")
+ax[2].set_xlabel('Duration (in minutes)')
+ax[2].set_ylabel('Count')
+ax[2].set_title('Distribution of Movie Durations')
+ax[2].legend()
+
+
+
+release_count = df['release_year'].value_counts().sort_index()
+ax[3].scatter(release_count.index, release_count.values , color = "red" , label = "Release Year") 
+ax[3].set_xlabel('Release Year Scatter')
+ax[3].set_ylabel('Release Year')
+ax[3].set_title('Content Release Trend Over the Years')
+ax[3].tick_params(axis = 'x' , rotation = 45)
+ax[3].legend()
+
+country_counts = df['country'].value_counts().head(10)
+
+
+ax[4].barh(country_counts.index, country_counts.values, color='green' , label = "Country")
+ax[4].set_title('Top 10 Countries by Number of Shows')
+ax[4].set_xlabel("Number of Shows")
+ax[4].set_ylabel("Country")
+ax[4].legend()
+
+
+
+
+content_by_year = df.groupby('release_year')['type'].value_counts().unstack().fillna(0)
+
+# First Subplot of Movies
+
+ax[5].plot(content_by_year.index , content_by_year['Movie'] , color = "green" , label = "Movie")
+ax[5].set_title("Number of Movies by Year")
+ax[5].set_xlabel("Year")
+ax[5].set_ylabel("Number of Movies")
+ax[5].legend()
+ax[5].tick_params(axis = 'x' , rotation = 45)
+
+# Second Subplot of TV Shows
+ax[6].plot(content_by_year.index , content_by_year['TV Show'] , color = "red" , label = "TV Show")
+ax[6].set_title("Number of TV Shows by Year")
+ax[6].set_xlabel("Year")
+ax[6].set_ylabel("Number of TV Shows")
+ax[6].legend()
+ax[6].tick_params(axis = 'x' , rotation = 45)
+
+fig.delaxes(ax[7])  # Remove the extra subplot if not used
+
+
+plt.tight_layout(pad=4.0)  # Increase padding between subplots
+fig.subplots_adjust(top=0.80, hspace=0.4, wspace=0.3)  # Add horizontal and vertical space
+fig.suptitle("Netflix Data Visualizations", fontsize=20, fontweight="bold" )
+plt.savefig("C:\\Users\\Aman Shah\\Desktop\\PYTHON FROM SCRATCH\\Matplotlib Library\\Project\\Netflix Data Visualizations.pdf" , dpi = 300 , bbox_inches = "tight")
+plt.show()
